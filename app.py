@@ -20,11 +20,12 @@ import plotly.express as px
 import warnings
 warnings.filterwarnings("ignore")
 
-tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
-bert  = TFAlbertModel.from_pretrained('albert-base-v2')
+
+
 
 @st.cache(allow_output_mutation=True)
 def loading_model():
+  bert  = TFAlbertModel.from_pretrained('albert-base-v2')
   model=tf.keras.models.load_model('model.h5')
   return model
 
@@ -68,6 +69,8 @@ def extracting_text(url):
 
 @st.cache(allow_output_mutation=True)
 def tokenize(sentences,max_len):
+    tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2') 
+    bert  = TFAlbertModel.from_pretrained('albert-base-v2')
     bert_inp=tokenizer.encode_plus(sentences,max_length=max_len,add_special_tokens = True,pad_to_max_length = True,return_attention_mask = True,truncation = True)
     
     input_ids=np.asarray(bert_inp['input_ids']).reshape(-1,max_len)
