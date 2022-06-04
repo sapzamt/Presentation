@@ -23,14 +23,14 @@ warnings.filterwarnings("ignore")
 
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600)
 def loading_model():
   bert  = TFAlbertModel.from_pretrained('albert-base-v2')
   model=tf.keras.models.load_model('model.h5')
   return model
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600)
 def  cleaning_text(sentence):
     
     #Replace empois to meaningful words
@@ -57,7 +57,7 @@ def  cleaning_text(sentence):
 
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600)
 def extracting_text(url):
     reader = easyocr.Reader(['en'])
     result = reader.readtext(url,paragraph="False")
@@ -67,7 +67,7 @@ def extracting_text(url):
     
     return sent[1:]
 
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600)
 def tokenize(sentences,max_len):
     tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2') 
     bert  = TFAlbertModel.from_pretrained('albert-base-v2')
@@ -78,7 +78,7 @@ def tokenize(sentences,max_len):
     
     return input_ids,attention_masks
 
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600)
 def preparing_data(sentences,sentences1,url):
 
     input_ids,attention_masks=tokenize(sentences,250)
@@ -95,7 +95,7 @@ def preparing_data(sentences,sentences1,url):
     
     return dataset
 
-@st.cache(allow_output_mutation=True,suppress_st_warning=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600,suppress_st_warning=True)
 def plotting_positive_plot(pos,neg):
   st.success('The result of sentimental analysis is POSITIVE')
   col1, col2, col3 = st.columns(3)
@@ -111,7 +111,7 @@ def plotting_positive_plot(pos,neg):
 
   return st.plotly_chart(graph,use_container_width=True)
 
-@st.cache(allow_output_mutation=True,suppress_st_warning=True)
+@st.cache(allow_output_mutation=True,max_entries=10, ttl=3600,suppress_st_warning=True)
 def plotting_negative_plot(pos,neg):
   st.warning('The result of sentimental analysis is NEGATIVE')
   col1, col2, col3 = st.columns(3)
